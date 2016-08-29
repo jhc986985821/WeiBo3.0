@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hcq.dao.mapper.MessageReplyMapper">
+	
+	<insert id="addMessageReply" parameterType="MessageReply">
+		<selectKey keyProperty="Rid" resultType="Integer" order="BEFORE">
+			select max(rid)+1 as Rid from messagereply
+		</selectKey>
+		insert into messagereply values(#{Rid},#{Mid},#{Uid},now(),
+		#{Rcontent})
+	</insert >
+		
+	<delete id="delMessageReply" parameterType="MessageReply">
+			delete from messagereply where rid= #{Rid}
+	</delete>
+	
+</mapper>

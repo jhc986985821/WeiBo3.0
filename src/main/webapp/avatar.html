@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>头像设置 - 灵步微博</title>
+<link href="styles/global.css" type="text/css" rel="stylesheet" />
+<link href="styles/avatar.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/showpic.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery.iframe-transport.js"></script>
+<script src="js/jquery.fileupload.js"></script>
+
+
+<script>
+$(function(){
+		
+		$.ajax({
+			url:'user_checklogin',
+			dataType:'JSON',
+			type:"post",
+			success:function(data){
+				if(data.code==1){
+					if(data.obj.Uimage != ""){
+						$("#bannerTopPic").html('<img src="'+ data.obj.Uimage +'" width="96" height="96" align="absmiddle" style="filter: alpha(opacity = 50)" />');
+					}else{
+						$("#bannerTopPic").html('<img src="images/tx2.jpg" width="96" height="96" align="absmiddle" style="filter: alpha(opacity = 50)" />');
+					}
+				}
+			}
+		});
+	});
+
+
+
+	$(function() {
+		$('#fileupload').fileupload(
+				{
+					dataType : 'json',
+					url : 'file_upload',
+					acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i,
+					add : function(e, data) {
+						data.context = $("#enter").text("上传").appendTo(
+								"#picform").click(function() {
+							data.submit();
+						});
+					},
+					done : function(e, data) {
+						var data = data.result;
+						if (data.code == 1) {
+							console.log(data.obj);
+							sessionStorage.setItem("src1", data.obj);
+							insertPic();
+						}else{
+							alert("文件上传失败，请检查文件类型或重新上传");
+						}
+					}
+				});
+	});
+	
+	function insertPic(){
+		$.ajax({
+			type: "post",
+			data: {'Uimage':sessionStorage.getItem("src1")},
+			url: "update_image",
+			dataType : "json",
+			success : function(data){
+				if(data.code==1){
+					alert("上传成功");
+					if(data.obj!=""){
+						$("#bannerTopPic").html('<img src="'+ data.obj +'" width="96" height="96" align="absmiddle" style="filter: alpha(opacity = 50)" />');
+					}else{
+						$("#bannerTopPic").html('<img src="images/tx2.jpg" width="96" height="96" align="absmiddle" style="filter: alpha(opacity = 50)" />');
+					}
+				}else{
+					alert("上传失败,原因：" + data.msg);
+					return false;
+				}
+			}
+		});
+	}
+</script>
+</head>
+
+<body>
+	<form action="" method="post" enctype="multipart/form-data"
+		name="form1" id="form1">
+		<!-- container部分DIV -->
+		<div id="container">
+			<!-- banner部分DIV -->
+			<div id="banner">
+				<!-- banner部分的leftDIV -->
+				<div class="left" id="left">
+					<!-- bannerLeft部分的topDIV -->
+					<div class="top" id="bannerTop">
+						<!-- bannerLeftTop部分的picDIV -->
+
+						<div class="pic1" id="bannerTopPic">
+						</div>
+					
+					</div>
+						<!-- 图片上传div -->
+						<div id="picform" title="添加图片">
+							修改头像：<input type="file" name="files" id="fileupload"
+								onchange="previewMultipleImage(this,'news_pic_show')" multiple /><br />
+							<div>
+								<br />
+								<fieldset id="news_pic_show">
+									<legend>图片预览</legend>
+								</fieldset>
+							</div>
+							<input type="button" onclick="cancel()" value="取消"> <input
+								type="button" value="确认" id="enter" >
+						</div>
+				</div>
+				
+			</div>
+	</form>
+</body>
+</html>
