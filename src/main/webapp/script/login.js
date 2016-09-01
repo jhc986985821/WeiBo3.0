@@ -59,7 +59,6 @@ $(function(){
 			dataType : "json",
 			success : function(data){
 				if(data.code==1){
-					alert("登录成功");
 					location.href="CustomerIndex.html?user.Uid="+data.obj.Uid;
 				}else{
 					alert("登录失败,原因：" + data.msg);

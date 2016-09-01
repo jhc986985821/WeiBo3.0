@@ -14,77 +14,136 @@
 <script src="script/trim.js"></script>
 <script src="js/showpic.js"></script>
 <script>
-	$(function(){
-		var href= location.href;
+	$(function() {
+		var href = location.href;
 		var index = href.indexOf("?");
-		var params = href.substring(index+1);
-		var indexuid=href.indexOf("=");
-		var uid = href.substring(indexuid+1);
-		sessionStorage.setItem("userhtml","CustomerIndex.html?"+params);
-		$("#index").attr("href", sessionStorage.getItem('userhtml'));
-		
+		var params = href.substring(index + 1);
+		var indexuid = href.indexOf("=");
+		var uid = href.substring(indexuid + 1);
+		//存session  方便之后的网页取
+		sessionStorage.setItem("userindex", "CustomerIndex.html?" + params);
+		sessionStorage.setItem("userhtml", "MyWB.html?" + params);
+
+		$("#index").attr("href", sessionStorage.getItem('userindex'));
+		$("#MyWB").attr("href", sessionStorage.getItem('userhtml'));
+
+		var htmlstring = '<ul><a href="MyWB.html?'
+				+ params
+				+ '" class="a1"><li><font class="style1">2</font><br /> <font class="style2">微博</font></li></a>';
+		htmlstring += '<a href="friend.html?'
+				+ params
+				+ '" class="a1"><li><font class="style1">12</font><br /> <font class="style2">关注</font></li></a>';
+		htmlstring += '<a href="focusonyou.html?uid='
+				+ uid
+				+ '" class="a1"><li><font class="style1">23</font><br /> <font class="style2">粉丝</font></li></a>';
+		htmlstring += '</ul>';
+		$("#mainRightPostionFirstLineWord2").html(htmlstring);
+
 		//每次加载就创建indexdb本地数据库
 		createDatabase();
 		
+		/* var getMessage = {
+			dataType : 'json',
+			url : 'messageReceive',
+			data : {"user.Uid":"1"},
+			type : 'get',
+			success : function(data) {
+				
+			}
+		};
+		
+		window.setInterval(function() {
+			$.ajax(getMessage)
+		}, 10000); */
+
 		var getting = {
 			dataType : 'json',
 			url : 'selectAllByUid',
 			data : params,
-			type : 'post',
+			type : 'get',
 			success : function(data) {
 				if (data.code == 1) {
 					$("#mainBannerContent").html("");
-					
-					var obj=data.obj;
-					var html="";
-					for(var i=0;i<obj.length;i++){
-						for(var j=0;j<obj[i].length;j++){
-							html+='<div id="'+obj[i][j].Mid+'" Mid="'+obj[i][j].Mid+'" Cid="'+obj[i][j].Cid+'" class="stateShow" onmouseout="stateMouseOut(this)" onmouseover="stateMouseOver(this)" style="background-color: rgb(255, 255, 255);">';
-							html+='<div class="stateShowWord"><table class="stateTable" width="450" cellspacing="0" cellpadding="0" border="0">';
-							html+='<tbody><tr><td width="70" valign="top" align="center"><a href="#"><img width="48" height="48" alt="" src="'+obj[i][j].user.Uimage+'">';
-							html+='</a></td><td width="380"><a href="#">'+obj[i][j].user.Ualais+'</a><img align="absmiddle" style="border: none;" src="images/1.gif">';
-							html+=obj[i][j].Mcontent+'</td></tr></tbody></table></div><div class="stateShowtime">'+obj[i][j].Mdatetime+'</div><div class="stateOp">';
-							html+='<a class="opState" onclick="reform(this)">回复</a><a class="opState">转发</a>';
-							if(obj[i][j].user.Uid==uid){
-								html+='<a class="opState" onclick="delState(this)">删除</a>';
+
+					var obj = data.obj;
+					var html = "";
+					for (var i = 0; i < obj.length; i++) {
+							cid=obj[i].Cid?obj[i].Cid:0;
+							html += '<div id="'
+									+ obj[i].Mid
+									+ '" Mid="'
+									+ obj[i].Mid
+									+ '" Cid="'
+									+ cid
+									+ '" class="stateShow" onmouseout="stateMouseOut(this)" onmouseover="stateMouseOver(this)" style="background-color: rgb(255, 255, 255);">';
+							html += '<div class="stateShowWord"><table class="stateTable" width="450" cellspacing="0" cellpadding="0" border="0">';
+							html += '<tbody><tr><td width="70" valign="top" align="center"><a href="#"><img width="48" height="48" alt="" src="'+obj[i].user.Uimage+'">';
+							html += '</a></td><td width="380"><a href="#">'
+									+ obj[i].user.Ualais
+									+ '</a><img align="absmiddle" style="border: none;" src="images/1.gif">';
+							html += obj[i].Mcontent
+									+ '</td></tr></tbody></table></div><div class="stateShowtime">'
+									+ obj[i].Mdatetime
+									+ '</div><div class="stateOp">';
+							html += '<a class="opState" onclick="reform(this)">回复</a><a class="opState" onclick="reform1(this)">转发</a>';
+							if (obj[i].user.Uid == uid) {
+								html += '<a class="opState" onclick="delState(this)">删除</a>';
 							}
-							html+='</div><div class="huifu"></div></div></div>';  
-							html+='<a class="a1" href="#"><font class="style2">爱转发</font></a><font class="f3">和其他31人转发过</font><br><br>';
-							for(var k=0;k<obj[i][j].messageReply.length;k++){
-								html+='<div id="mainBannerContent2PeopleWordBack"><table width="400" cellspacing="0" cellpadding="0" border="0">';
-								html+='<tbody><tr><td><img width="25" align="absmiddle" height="25" src="'+obj[i][j].messageReply[k].Ruimage+'"><a class="a1" href="#">'+obj[i][j].messageReply[k].Runame+'</a>：'+obj[i][j].messageReply[k].Rcontent;
-								html+='   <span style="color:#ccc">'+obj[i][j].messageReply[k].Rdatetime+'</span><a href="#">回复</a></td></tr></table></div><br><br>';
+							html += '</div><div class="huifu"></div></div></div><br>';
+							for (var k = 0; k < obj[i].messageReply.length; k++) {
+								html += '<div id="mainBannerContent2PeopleWordBack"><table width="400" cellspacing="0" cellpadding="0" border="0">';
+								html += '<tbody><tr><td><img width="25" align="absmiddle" height="25" src="'+obj[i].messageReply[k].Ruimage+'"><a class="a1" href="#">'
+										+ obj[i].messageReply[k].Runame
+										+ '</a>：'
+										+ obj[i].messageReply[k].Rcontent;
+								html += '   <span style="color:#ccc">'
+										+ obj[i].messageReply[k].Rdatetime
+										+ '</span><a href="#">回复</a></td></tr></table></div><br><br>';
 							}
-							
 							//存indexdb
 							populateDatabase(obj);
-							
-						}	
+
+						
 					}
-					
-					$("#mainBannerContent").html(html); 
-					
+
+					$("#mainBannerContent").html(html);
+
 					//个人头像
 					$("#mainRightPostionFirstLineIcon").html("");
-					var icon='<a href="MyWB.html?user.Uid='+data.users.Uid+'"><img src="'+data.users.Uimage+'" alt="" width="48" '
+					var icon = '<a href="MyWB.html?user.Uid='
+							+ data.users.Uid
+							+ '"><img src="'+data.users.Uimage+'" alt="" width="48" '
 							+' height="48" align="absmiddle" title="" border="0" /></a>';
 					$("#mainRightPostionFirstLineIcon").html(icon);
-					
-					
+
 					//个人简介
 					$("#mainRightPostionFirstLineWord1").html('');
-					var xinxi = '&nbsp;<font color="#005DC3"><b><a href="MyWB.html?user.Uid='+data.users.Uid+'" class="a1">'+data.users.Ualais+'</a></b></font><br /> &nbsp;'+data.users.Region;
+					var xinxi = '&nbsp;<font color="#005DC3"><b><a href="MyWB.html?user.Uid='
+							+ data.users.Uid
+							+ '" class="a1">'
+							+ data.users.Ualais
+							+ '</a></b></font><br /> &nbsp;'
+							+ data.users.Region;
 					$("#mainRightPostionFirstLineWord1").html(xinxi);
-					
+
 					//个人朋友
 					$("#myfriends").html("");
-					var friends='';
-					var searchfriends="";
-					var friend='';
-					for(var i=0;i<data.userslist.length;i++){
-					 	friends += '<a href="MyWB.html?user.Uid='+data.userslist[i].Uid+'" class="a1"><li><img src="'+data.userslist[i].Uimage+'" border="0" width="50px" height="50px" /><br /> <font class="style2">'+ data.userslist[i].Ualais+'</font></li></a>';
-					 	searchfriends+='<img src="'+data.userslist[i].Uimage+'" width="20px" height="20px" /><a href="javascript:fetchUalaisMessage(\''+data.userslist[i].Ualais+'\')">'+data.userslist[i].Ualais+'</a><br>';
-						friend+='<a href="javascript:inputtext(\''+data.userslist[i].Ualais+'\')"><li><img src="'+data.userslist[i].Uimage+'" border="0" /> <font class="style2">'+ data.userslist[i].Ualais+'</li></a> ';
+					var friends = '';
+					var searchfriends = "";
+					var friend = '';
+					for (var i = 0; i < data.userslist.length; i++) {
+						friends += '<a href="MyWB.html?user.Uid='
+								+ data.userslist[i].Uid
+								+ '" class="a1"><li><img src="'+data.userslist[i].Uimage+'" border="0" width="50px" height="50px" /><br /> <font class="style2">'
+								+ data.userslist[i].Ualais + '</font></li></a>';
+						searchfriends += '<img src="'+data.userslist[i].Uimage+'" width="20px" height="20px" /><a href="javascript:fetchUalaisMessage(\''
+								+ data.userslist[i].Ualais
+								+ '\')">'
+								+ data.userslist[i].Ualais + '</a><br>';
+						friend += '<a href="javascript:inputtext(\''
+								+ data.userslist[i].Ualais
+								+ '\')"><li><img src="'+data.userslist[i].Uimage+'" border="0" /> <font class="style2">'
+								+ data.userslist[i].Ualais + '</li></a> ';
 					}
 					$("#friends").html(searchfriends);
 					$("#myfriends").html(friends);
@@ -92,12 +151,12 @@
 				}
 			}
 		};
-		
+
 		//延时ajax   防止indexdb创建过慢获取不到localDatabase.db
 		window.setTimeout(function() {
-			 $.ajax(getting)
-			 }, 900); 
-		 
+			$.ajax(getting)
+		}, 500);
+
 		$('#fileupload').fileupload(
 				{
 					dataType : 'json',
@@ -151,7 +210,7 @@
 				<div id="topWordMenu">
 					<ul>
 						<li><a href="#" id="index">首页</a></li>
-						<li><a href="MyWB.html">我的微博</a></li>
+						<li><a id="MyWB" href="#">我的微博</a></li>
 						<li><a href="SBGG.html">找人</a></li>
 						<li><a href="setting.html">设置</a></li>
 						<li><a href="#">手机</a></li>
@@ -165,7 +224,7 @@
 			<!-- 内容总容器 mainDIV 开 始-->
 			<div id="main">
 				<!-- 左侧mainBannerDIV 开始 -->
-				<div id="mainBanner"  style="overflow:auto ! important;">
+				<div id="mainBanner" style="overflow: auto ! important;">
 					<!-- mainBannerTop DIV 开始 -->
 					<div id="mainBannerTop">
 						<!--id=mainBannerTopIssue 发布框-->
@@ -320,10 +379,7 @@
 						</div>
 					</div>
 					<!--不同人的内容-->
-					<div id="mainBannerContent">
-
-
-					</div>
+					<div id="mainBannerContent"></div>
 				</div>
 				<!-- 左侧mainBanner DIV 结束-->
 				<!-- 右侧mainRight DIV开始 -->
@@ -336,14 +392,10 @@
 								<div id="mainRightPostionFirstLine">
 									<!-- 右侧mainRightPostionFirstLineIcon DIV 开始 -->
 									<div style="height: 58px;">
-										<div id="mainRightPostionFirstLineIcon">
-										
-										</div>
+										<div id="mainRightPostionFirstLineIcon"></div>
 										<!-- 右侧mainRightPostionFirstLineIcon DIV 结束 -->
 										<!-- 右侧mainRightPostionFirstLineWord1 DIV 开始 -->
-										<div id="mainRightPostionFirstLineWord1">
-										
-										</div>
+										<div id="mainRightPostionFirstLineWord1"></div>
 									</div>
 									<!-- 右侧mainRightPostionFirstLineWord1 DIV 结束 -->
 									<!-- 右侧mainRightPostionFirstLineWord2 DIV 开始 -->
@@ -511,26 +563,24 @@
 		<p id="backtop">
 			<a id="backtop1" href="#totop"><span></span>回到顶部</a>
 		</p>
-		
-		<div id="at" style="visibility: hidden;">
-		
-		</div>
-		
-		
+
+		<div id="at" style="visibility: hidden;"></div>
+
+
 		<div id="reform" title="回复">
 			<form id="reformtext">
-			<textarea name="Rcontent" rows="5" cols="20"></textarea>
+				<textarea name="Rcontent" rows="5" cols="20"></textarea>
 			</form>
 		</div>
-		
+		<div id="reform1" title="回复">
+			<textarea id="Mcontent" rows="5" cols="20"></textarea>
+		</div>
 		<div id="search">
-			<input type="text" id="searchfriend" onfocus="showfriends()"  placeholder="请输入你要查询的好友">
-			<input type="button" value="搜索">
+			<input type="text" id="searchfriend" onfocus="showfriends()"
+				placeholder="请输入你要查询的好友"> <input type="button" value="搜索">
 		</div>
-		
-		<div id="friends">
-			
-		</div>
-		</div>
+
+		<div id="friends"></div>
+	</div>
 </body>
 </html>

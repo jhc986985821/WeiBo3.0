@@ -210,6 +210,12 @@ function inittime() {
 	return str;
 }
 
+$('img').error(function(){
+	$(this).attr('src', 'images/nopic.jpg');
+});
+
+
+
 /* 转换文本框里面的内容,将所有的图像的值,替换为相应的imghtml语言,并且返回 */
 function changetxt(str) {
 	var ustr = new Array();
@@ -318,7 +324,34 @@ function stateMouseOut(divObj) {
 	 * hdivObj[i].childNodes[3].style.visibility = "hidden"; }
 	 */
 }
+function retransmission(cid){
+	$.ajax({
+		type: "post",
+		data: {'cid':cid},
+		url: "user_retransmission",
+		dataType : "json",
+		success : function(data){
+			if(data.code==1){
+			}else{
+				alert("转发失败,原因：" + data.msg);
+				return false;
+			}
+		}
+	});
+}
 
+
+
+function reform1(div){
+	var messageDiv = div.parentNode.parentNode;
+	//var textNode = div.parentNode.parentNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[2].nodeValue;
+	
+	
+	sessionStorage.setItem("mid",messageDiv.getAttribute("mid"));
+	sessionStorage.setItem("cid",messageDiv.getAttribute("cid"));
+	//sessionStorage.setItem("text",textNode);
+	$("#reform1").dialog("open");
+}
 
 
 function reform(div){
@@ -354,6 +387,43 @@ window.onload = function() {
 							//window.location.reload();
 						}else{
 							alert("回复失败！");
+						}
+					}
+				});
+			},
+			"取消":function(){
+				$(this).dialog("close");
+			}
+		}
+	});
+	$("#reform1").dialog({
+		autoOpen:false,
+		height:150,
+		width:350,
+		model:true,
+		buttons:{
+			"转发":function(){
+				var mid= sessionStorage.getItem('mid');
+				var text=sessionStorage.getItem('text');
+				var cid= sessionStorage.getItem('cid');
+				if(cid == null || cid == 0){
+					cid = mid;
+				}
+				var uid=location.href; //取得整个地址栏
+				var num=uid.indexOf("=");
+				uid = uid.substr(num+1);
+				var Mcontent = document.getElementById("Mcontent").value;
+				$.ajax({
+					type:'post',
+					data: {'Cid':cid,'user.Uid':uid,'Mcontent':Mcontent},
+					url: "user_retransmission",
+					dataType : "json",
+					success : function(data){
+						if(data.code==1){
+							$("#reform1").dialog("close");
+						}else{
+							alert("转发失败,原因：" + data.msg);
+							$("#reform1").dialog("close");
 						}
 					}
 				});

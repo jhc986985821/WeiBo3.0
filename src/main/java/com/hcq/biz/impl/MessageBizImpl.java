@@ -30,8 +30,8 @@ public class MessageBizImpl extends BaseBiz implements MessageBiz {
 	}
 
 	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,noRollbackForClassName={"java.lang.RuntimeException"},propagation=Propagation.NOT_SUPPORTED)
-	public List<Message> selectMessageByUid(Integer uid) {
-		return (List<Message>)basedao.findListById(Message.class, uid, "selectMessageByUid");
+	public List<Message> selectAllMessageByUid(Integer uid) {
+		return (List<Message>)basedao.findListById(Message.class, uid, "selectAllMessageByUid");
 	}
 
 	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,noRollbackForClassName={"java.lang.RuntimeException"},propagation=Propagation.NOT_SUPPORTED)
@@ -41,6 +41,16 @@ public class MessageBizImpl extends BaseBiz implements MessageBiz {
 
 	public Integer selectNewMessageCount(Integer uid) {
 		return (Integer) basedao.findById(Message.class, uid, "selectNewMessageCount");
+	}
+
+	@Transactional(readOnly=false,isolation=Isolation.DEFAULT,noRollbackForClassName={"java.lang.RuntimeException"},propagation=Propagation.REQUIRED)
+	public void resendMessage(Message message) {
+		basedao.save(message,"reSendMessage");
+	}
+
+	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,noRollbackForClassName={"java.lang.RuntimeException"},propagation=Propagation.NOT_SUPPORTED)
+	public List<Message> selectMyMessageByUid(Integer uid) {
+		return (List<Message>)basedao.findListById(Message.class, uid, "selectMyMessageByUid");
 	}
 
 }

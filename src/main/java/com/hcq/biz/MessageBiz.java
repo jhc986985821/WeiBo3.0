@@ -14,10 +14,14 @@ public interface MessageBiz {
 	
 	public void updateMessage(Message message);
 	
-	public List<Message> selectMessageByUid(Integer uid);
+	public List<Message> selectAllMessageByUid(Integer uid);
 	
 	public Message selectMessageByMid(Integer mid);
 	
 	public Integer selectNewMessageCount(Integer uid);
+
+	public void resendMessage(Message message);
+
+	public List<Message> selectMyMessageByUid(Integer uid);
 	
 }

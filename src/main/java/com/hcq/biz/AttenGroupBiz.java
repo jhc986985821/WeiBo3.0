@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface AttenGroupBiz {
 	public List findUidQueue(Integer uid); 
+	
+	public List findUid(Integer uider); 
 }

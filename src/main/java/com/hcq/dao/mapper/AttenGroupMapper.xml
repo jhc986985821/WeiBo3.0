@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hcq.dao.mapper.AttenGroupMapper">
+	<cache type="com.hcq.dao.mybatis.cache.MyRedisCache" />
+	
 	
 	<select id="findUidQueue" parameterType="Integer" resultType="String">
 		select uider from AttenGroup where uid=#{uid}
 	</select>
+	
+	<select id="findUid" parameterType="Integer" resultType="String">
+		select uid from AttenGroup where uider=#{uid}
+	</select>
+	
 	
 	<select id="selectHotPeople" resultType="attenGroup">
 		SELECT Uider, count( * ) AS count  FROM attenGroup GROUP BY Uider ORDER BY count DESClimit 2;

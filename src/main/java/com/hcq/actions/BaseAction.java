@@ -2,11 +2,7 @@ package com.hcq.actions;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.ServletActionContext;
-
 import com.google.gson.Gson;
 import com.hcq.web.model.JsonModel;
 import com.opensymphony.xwork2.ActionSupport;

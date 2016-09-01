@@ -52,14 +52,13 @@ function populateDatabase(obj) {
   
 	if (localDatabase != null && localDatabase.db != null) {
 		for(var i=0;i<obj.length;i++){
-			for(var j=0;j<obj[i].length;j++){
 				var request = store.put({
-					"mid":obj[i][j].Mid,
-					"cid":obj[i][j].Cid,
-					"Ualais":obj[i][j].user.Ualais,
-					"Uimage":obj[i][j].user.Uimage,
-					"Mcontent":obj[i][j].Mcontent,
-					"Mdatetime":obj[i][j].Mdatetime
+					"mid":obj[i].Mid,
+					"cid":obj[i].Cid,
+					"Ualais":obj[i].user.Ualais,
+					"Uimage":obj[i].user.Uimage,
+					"Mcontent":obj[i].Mcontent,
+					"Mdatetime":obj[i].Mdatetime
 				});
 				request.onsuccess = function(e) {
 					console.log("Added success");
@@ -68,7 +67,7 @@ function populateDatabase(obj) {
 				request.onerror = function(e) {
 					console.log(e.value);
 				};
-			}
+			
 		}
 	}
 }
@@ -104,7 +103,6 @@ function fetchUalaisMessage(Ualais) {
 					html+=jsonObj.Mcontent+'</td></tr></tbody></table></div><div class="stateShowtime">'+jsonObj.Mdatetime+'</div><div class="stateOp">';
 					html+='<a class="opState" onclick="reform(this)">回复</a><a class="opState">转发</a>';
 					html+='</div><div class="huifu"></div></div></div>';  
-					html+='<a class="a1" href="#"><font class="style2">爱转发</font></a><font class="f3">和其他31人转发过</font><br>';
 			        cursor.continue();  
 			    }  
 			    $("#mainBannerContent").html(html);

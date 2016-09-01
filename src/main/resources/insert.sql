@@ -8,7 +8,7 @@ insert into user values(3,"小华","小华","15570966834","547602467@qq.com","20
 
 insert into message values(101,1,null,"据说王宝强和马蓉离婚了！",now());
 insert into message values(102,2,null,"发微博不眨眼睛也很厉害！",now());
-insert into message values(103,3,null,"开学三天假！",now());
+insert into message values(117,3,116,"开学三天假！",now());
 
 
 insert into attenGroup values(1,1,2,now(),'朋友');
@@ -17,5 +17,8 @@ insert into attenGroup values(3,2,1,now(),'朋友');
 insert into attenGroup values(4,2,3,now(),'朋友');
 insert into attenGroup values(5,3,1,now(),'朋友');
 insert into attenGroup values(6,3,2,now(),'朋友');
+insert into attenGroup values(7,1,4,now(),'朋友');
+insert into attenGroup values(8,2,4,now(),'朋友');
+insert into attenGroup values(9,3,4,now(),'朋友');
 
 

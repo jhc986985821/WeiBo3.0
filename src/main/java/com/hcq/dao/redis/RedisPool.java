@@ -11,7 +11,7 @@ public class RedisPool {
 	
 	private RedisPool(){
 	ResourceBundle bundle =ResourceBundle.getBundle("redis");
-	//bundle就是一个map
+
 	if(bundle==null){
 		throw new IllegalArgumentException("[redis.properties] is not find ");
 	   }
@@ -22,7 +22,7 @@ public class RedisPool {
 	config.setTestOnBorrow(Boolean.valueOf(bundle.getString("redis.pool.testOnBorrow")));
 	config.setTestOnReturn(Boolean.valueOf(bundle.getString("redis.pool.testOnReturn")));
 	
-	//创建连接池
+	//锟斤拷锟斤拷锟斤拷锟接筹拷
 	pool =new JedisPool(config,bundle.getString("redis.ip"),Integer.valueOf(bundle.getString("redis.port")));
 	}
 

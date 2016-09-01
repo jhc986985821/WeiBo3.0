@@ -9,7 +9,7 @@ public class Message implements Serializable{
 	private static final long serialVersionUID = -895972845813178019L;
 	private int Mid;
 	private Users user;
-	private int Cid;
+	private Integer Cid;
 	private String Mcontent;
 	private String Mdatetime;
 	private List<MessageReply> messageReply;
@@ -34,12 +34,7 @@ public class Message implements Serializable{
 		Mid = mid;
 	}
 	
-	public int getCid() {
-		return Cid;
-	}
-	public void setCid(int cid) {
-		Cid = cid;
-	}
+
 	public String getMcontent() {
 		return Mcontent;
 	}
@@ -64,13 +59,14 @@ public class Message implements Serializable{
 		Mid = mid;
 		Mcontent = mcontent;
 	}
-	
-	@Override
-	public String toString() {
-		return "Message [Mid=" + Mid + ", user=" + user + ", Cid=" + Cid + ", Mcontent=" + Mcontent + ", Mdatetime="
-				+ Mdatetime + ", messageReply=" + messageReply + "]";
+	public Integer getCid() {
+		return Cid;
 	}
-	public Message(int mid, Users user, int cid, String mcontent, String mdatetime, List<MessageReply> messageReply) {
+	public void setCid(Integer cid) {
+		Cid = cid;
+	}
+	public Message(int mid, Users user, Integer cid, String mcontent, String mdatetime,
+			List<MessageReply> messageReply) {
 		super();
 		Mid = mid;
 		this.user = user;
@@ -79,5 +75,11 @@ public class Message implements Serializable{
 		Mdatetime = mdatetime;
 		this.messageReply = messageReply;
 	}
+	@Override
+	public String toString() {
+		return "Message [Mid=" + Mid + ", user=" + user + ", Cid=" + Cid + ", Mcontent=" + Mcontent + ", Mdatetime="
+				+ Mdatetime + ", messageReply=" + messageReply + "]";
+	}
+	
 	
 }

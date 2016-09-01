@@ -2,8 +2,6 @@ package com.hcq.actions;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;

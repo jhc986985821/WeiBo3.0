@@ -12,9 +12,11 @@
 		var index = href.indexOf("?");
 		var params = href.substring(index + 1);
 
-		$("#index").attr("href", sessionStorage.getItem('userhtml'));
+		$("#index").attr("href", sessionStorage.getItem('userindex'));
+		$("#MyWB").attr("href", sessionStorage.getItem('userhtml'));
+		$("#faweibo").attr("href", sessionStorage.getItem('userindex'));
 		$.ajax({
-					type : "post",
+					type : "get",
 					url : "selectMyMessageByUid",
 					data : params,
 					datatype : "json",
@@ -47,7 +49,7 @@
 									+ ' class="a1">'
 									+ obj[0].user.Ualais
 									+ '</a></b></font><br />&nbsp;'
-									+ obj[0].user.Region + '&nbsp;&nbsp;河西区';
+									+ obj[0].user.Region + '&nbsp;&nbsp;';
 							$("#mainRightPostionFirstLineWord1").html(xinxi);
 							var friends = '';
 							for (var i = 0; i < data.userslist.length; i++) {
@@ -92,7 +94,7 @@
 			<div id="topWordMenu">
 				<ul>
 					<li><a href="CustomerIndex.html" id="index">首页</a></li>
-					<li><a href="#">我的微博</a></li>
+					<li><a id="MyWB" href="MyWB.html">我的微博</a></li>
 					<li><a href="#">找人</a></li>
 					<li><a href="setting.html">设置</a></li>
 					<li><a href="#">手机</a></li>
@@ -133,8 +135,8 @@
 						<!-- 左侧mainBannerMenuTopWord1DIV 结束-->
 						<!-- 左侧mainBannerMenuTopWord2DIV 开始 -->
 						<div id="mainBannerMenuTopWord2">
-							<img src="images/mainBannerMenuTopWord2.gif" title="" alt="" /><a
-								href="CustomerIndex.html">发微博</a>
+							<img  src="images/mainBannerMenuTopWord2.gif" title="" alt="" /><a
+								id="faweibo" href="#">发微博</a>
 						</div>
 						<!-- 左侧mainBannerMenuTopWord2DIV 结束 -->
 					</div>

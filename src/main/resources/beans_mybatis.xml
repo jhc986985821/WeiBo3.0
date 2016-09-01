@@ -24,6 +24,7 @@
     		http://www.springframework.org/schema/jee/spring-jee.xsd
     		http://www.springframework.org/schema/jms 
     		http://www.springframework.org/schema/jms/spring-jms.xsd"
+    		
     		>
 	
 	<!-- 包扫描，以加载带了注解的要托管bean -->
@@ -32,6 +33,7 @@
 	
 	<!-- 启用注解驱动 -->
 	<tx:annotation-driven transaction-manager="txManager"/>
+	
 	
 	<mongo:mongo host="127.0.0.1" port="27017"/>  
       
@@ -44,8 +46,16 @@
 	<!-- spring 整合mybatis -->
 	<!-- 数据库配置读取，因为要创建数据源，要知道数据库的配置 -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations" value="classpath:jdbc.properties"></property>
+		<property name="locations">
+			 <list>  
+            	<value>classpath*:jdbc.properties</value>  
+            	<value>classpath*:redis.properties</value>  
+        	</list>  
+		</property>
 	</bean>
+	
+	<!-- redis数据源-->
+
 	<!-- dbcp 数据库连接池配置 -->
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

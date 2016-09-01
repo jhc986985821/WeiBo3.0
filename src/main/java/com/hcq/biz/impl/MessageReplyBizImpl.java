@@ -7,10 +7,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hcq.bean.MessageReply;
 import com.hcq.biz.BaseBiz;
 import com.hcq.biz.MessageReplyBiz;
@@ -18,7 +14,7 @@ import com.hcq.biz.MessageReplyBiz;
 @Service
 public class MessageReplyBizImpl extends BaseBiz implements MessageReplyBiz{
 	private static String MessageReply_COLLECTION = "MessageReplys";
-	
+
 	@Autowired  
     MongoOperations mongoTemplate; 
 	

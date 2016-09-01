@@ -11,6 +11,10 @@ public class AttenGroup implements Serializable{
 	private String Ngname="未分组";
 	private Integer count;
 	
+	public AttenGroup() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public Integer getCount() {
 		return count;
 	}

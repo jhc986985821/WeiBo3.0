@@ -75,5 +75,9 @@ create table priMessage(
 	constraint FK8 foreign key(Uid) references user(Uid)
 )
 
+select * from message where uid in(select uider as uid from attenGroup where uid = 1) or uid=1 order by Mdatetime desc;
+
+
+
 
 

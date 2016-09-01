@@ -1,84 +1,159 @@
 package com.hcq.dao.mybatis.cache;
 
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.io.ByteArrayInputStream;  
+import java.io.ByteArrayOutputStream;  
+import java.io.IOException;  
+import java.io.ObjectInputStream;  
+import java.io.ObjectOutputStream;  
+import org.springframework.cache.Cache;  
+import org.springframework.cache.support.SimpleValueWrapper;  
+import org.springframework.dao.DataAccessException;  
+import org.springframework.data.redis.connection.RedisConnection;  
+import org.springframework.data.redis.core.RedisCallback;  
+import org.springframework.data.redis.core.RedisTemplate;  
+  
+  
+public class RedisCache implements Cache {  
+  
+    private RedisTemplate<String, Object> redisTemplate;  
+    private String name;  
+  
+    public RedisTemplate<String, Object> getRedisTemplate() {  
+        return redisTemplate;  
+    }  
+  
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {  
+        this.redisTemplate = redisTemplate;  
+    }  
+  
+    public void setName(String name) {  
+        this.name = name;  
+    }  
+  
+    public String getName() {  
+        return this.name;  
+    }  
+  
+    public Object getNativeCache() {  
+        return this.redisTemplate;  
+    }  
+    public ValueWrapper get(Object key) {  
+        final String keyf = (String) key;  
+        Object object = null;  
+        object = redisTemplate.execute(new RedisCallback<Object>() {  
+            public Object doInRedis(RedisConnection connection)  
+                    throws DataAccessException {  
+  
+                byte[] key = keyf.getBytes();  
+                byte[] value = connection.get(key);  
+                if (value == null) {  
+                    return null;  
+                }  
+                return toObject(value);  
+  
+            }  
+        });  
+        return (object != null ? new SimpleValueWrapper(object) : null);  
+    }  
+  
+    public void put(Object key, Object value) {  
+        final String keyf = (String) key;  
+        final Object valuef = value;  
+        final long liveTime = 86400;  
+  
+        redisTemplate.execute(new RedisCallback<Long>() {  
+            public Long doInRedis(RedisConnection connection)  
+                    throws DataAccessException {  
+                byte[] keyb = keyf.getBytes();  
+                byte[] valueb = toByteArray(valuef);  
+                connection.set(keyb, valueb);  
+                if (liveTime > 0) {  
+                    connection.expire(keyb, liveTime);  
+                }  
+                return 1L;  
+            }  
+        });  
+    }  
+  
+    /** 
+     * 鎻忚堪 : <Object杞琤yte[]>. <br> 
+     * <p> 
+     * <浣跨敤鏂规硶璇存槑> 
+     * </p> 
+     *  
+     * @param obj 
+     * @return 
+     */  
+    private byte[] toByteArray(Object obj) {  
+        byte[] bytes = null;  
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();  
+        try {  
+            ObjectOutputStream oos = new ObjectOutputStream(bos);  
+            oos.writeObject(obj);  
+            oos.flush();  
+            bytes = bos.toByteArray();  
+            oos.close();  
+            bos.close();  
+        } catch (IOException ex) {  
+            ex.printStackTrace();  
+        }  
+        return bytes;  
+    }  
+  
+    /** 
+     * 鎻忚堪 : <byte[]杞琌bject>. <br> 
+     * <p> 
+     * <浣跨敤鏂规硶璇存槑> 
+     * </p> 
+     *  
+     * @param bytes 
+     * @return 
+     */  
+    private Object toObject(byte[] bytes) {  
+        Object obj = null;  
+        try {  
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);  
+            ObjectInputStream ois = new ObjectInputStream(bis);  
+            obj = ois.readObject();  
+            ois.close();  
+            bis.close();  
+        } catch (IOException ex) {  
+            ex.printStackTrace();  
+        } catch (ClassNotFoundException ex) {  
+            ex.printStackTrace();  
+        }  
+        return obj;  
+    }  
+  
+    public void evict(Object key) {  
+        // TODO Auto-generated method stub  
+        final String keyf = (String) key;  
+        redisTemplate.execute(new RedisCallback<Long>() {  
+            public Long doInRedis(RedisConnection connection)  
+                    throws DataAccessException {  
+                return connection.del(keyf.getBytes());  
+            }  
+        });  
+    }  
+  
+    public void clear() {  
+        redisTemplate.execute(new RedisCallback<String>() {  
+            public String doInRedis(RedisConnection connection)  
+                    throws DataAccessException {  
+                connection.flushDb();  
+                return "ok";  
+            }  
+        });  
+    }
 
-import org.apache.ibatis.cache.Cache;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import com.hcq.dao.redis.RedisPool;
-import com.hcq.utils.SerializableUtil;
+	public <T> T get(Object arg0, Class<T> arg1) {
+		return null;
+	}
 
-import redis.clients.jedis.Jedis;
-
-public class RedisCache implements Cache{
+	public ValueWrapper putIfAbsent(Object arg0, Object arg1) {
+		return null;
+	}  
 	
-	private static Logger logger = LogManager.getLogger(RedisCache.class);
-	private String id;
-	private Jedis redisClient=createRedis();  //创建一个jedis连接
-	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 	
-	
-	
-	public void setReadWriteLock(ReadWriteLock readWriteLock) {
-		this.readWriteLock = readWriteLock;
-	}
-
-	public RedisCache(String id) {
-		if(id==null){
-			throw new IllegalArgumentException("Cache instance requires an ID");
-		}
-		logger.debug("create an cache instance with id"+id);
-		this.id=id;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	/**从连接池中取
-	 * @return
-	 */
-	private  static Jedis createRedis() {
-		Jedis jedis =RedisPool.getPool().getResource();
-		return jedis;
-	}
-
-	public void putObject(Object key, Object value) {
-		byte[] keybyte=SerializableUtil.serialize(key);
-		byte[]valuebyte=SerializableUtil.serialize(value);
-		this.redisClient.set(keybyte, valuebyte);
-	}
-
-	public Object getObject(Object key) {
-		//缓存穿透
-		
-		byte[] values=this.redisClient.get(SerializableUtil.serialize(key));
-		//算法：计算一定时间内没有命中的键，存起来   key->value
-		if(values==null){
-			return null;
-		}
-		Object obj =SerializableUtil.unserizlize(values);
-		return obj;
-	}
-
-	public Object removeObject(Object key) {
-		byte[]keybyte=SerializableUtil.serialize(key);
-		return this.redisClient.expire(keybyte, 0);
-	}
-
-	public void clear() {
-		this.redisClient.flushDB();
-	}
-
-	public int getSize() {
-		Long size = this.redisClient.dbSize();
-		int s =Integer.valueOf(size+"");
-		return s;
-	}
-
-	public ReadWriteLock getReadWriteLock() {
-		return readWriteLock;
-	}
-
-}
+  
+}  

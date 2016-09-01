@@ -1,8 +1,10 @@
 package com.hcq.mq.queue;
 
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 
- * @author liang
  * @description   Topic生产者发送消息到Topic
  * 
  */
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component("topicSender")
 public class TopicSender {
 	
-	//@Autowired
-	//@Qualifier("jmsTopicTemplate")
+	@Autowired
+	@Qualifier("jmsTopicTemplate")
 	private JmsTemplate jmsTemplate;
 	
 	/**
@@ -29,12 +30,13 @@ public class TopicSender {
 	 * @param queueName 队列名称
 	 * @param message 消息内容
 	 */
-	public void send(String topicName,final String message){
-		jmsTemplate.send(topicName, new MessageCreator() {
+	public void send(final String message){
+		jmsTemplate.send("weibo", new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
 				return session.createTextMessage(message);
 			}
 		});
 	}
+	
 
 }

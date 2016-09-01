@@ -9,7 +9,12 @@ import com.hcq.bean.Users;
 import com.hcq.biz.AttenGroupBiz;
 import com.hcq.biz.MessageBiz;
 import com.hcq.biz.MessageReplyBiz;
+import com.hcq.biz.RedisBiz;
+import com.hcq.biz.RedisTestBiz;
 import com.hcq.biz.UsersBiz;
+import com.hcq.dao.impl.RedisDaoImpl;
+import com.hcq.dao.mybatis.cache.MyRedisCache;
+import com.hcq.dao.mybatis.cache.RedisCache;
 
 import junit.framework.TestCase;
 
@@ -35,12 +40,6 @@ public class Mytest extends TestCase {
 		System.out.println(message);
 	}
 	
-	public void selectListlMessage(){
-		ApplicationContext context=new ClassPathXmlApplicationContext("beans_mybatis.xml");
-		MessageBiz messageBiz = (MessageBiz) context.getBean("messageBizImpl");
-		List<Message> message =messageBiz.selectMessageByUid(1002);
-		System.out.println(message);
-	}
 	
 	public void addMessageReply(){
 		ApplicationContext context=new ClassPathXmlApplicationContext("beans_mybatis.xml");
@@ -70,6 +69,21 @@ public class Mytest extends TestCase {
 		UsersBiz usersBiz = (UsersBiz) context.getBean("usersBizImpl");
 		Users users=usersBiz.getUser(1002);
 		System.out.println(users);
+	}
+	
+	public void test2(){
+		ApplicationContext context=new ClassPathXmlApplicationContext("beans_mybatis.xml");
+		MyRedisCache redisCache = new MyRedisCache("");
+		Users users = new Users(1);
+		redisCache.putObject("2", users);
+	}
+	
+	
+	public void test3(){
+		ApplicationContext context=new ClassPathXmlApplicationContext(new String[]{"beans_mybatis.xml","beans_redis.xml"});
+		RedisTestBiz redisbiz=(RedisTestBiz) context.getBean("redisBizImpl");
+		Users users = new Users(1);
+		redisbiz.putObject("1", users);
 	}
 	
 	
