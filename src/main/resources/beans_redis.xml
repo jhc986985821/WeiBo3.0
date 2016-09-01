@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="    
+    		http://www.springframework.org/schema/beans        
+    		http://www.springframework.org/schema/beans/spring-beans.xsd
+    		http://www.springframework.org/schema/context
+    		http://www.springframework.org/schema/context/spring-context.xsd
+    		http://www.springframework.org/schema/tx
+    		http://www.springframework.org/schema/tx/spring-tx.xsd
+    		http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+    		http://www.springframework.org/schema/jee 
+    		http://www.springframework.org/schema/jee/spring-jee.xsd
+    		http://www.springframework.org/schema/cache
+            http://www.springframework.org/schema/cache/spring-cache.xsd
+    		
+    		
+    		">
+	
+	<context:property-placeholder  
+        location="classpath:redis.properties" />  
+  
+    <!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->  
+    <cache:annotation-driven cache-manager="cacheManager" />  
+  
+    <!-- spring自己的换管理器，这里定义了两个缓存位置名称 ，既注解中的value -->  
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  
+        <property name="caches">  
+            <set>  
+                <bean class="com.hcq.dao.mybatis.cache.RedisCache">  
+                    <property name="redisTemplate" ref="redisTemplate" />  
+                    <property name="name" value="default"/>  
+                </bean>  
+                <bean class="com.hcq.dao.mybatis.cache.RedisCache">  
+                    <property name="redisTemplate" ref="redisTemplate02" />  
+                    <property name="name" value="commonCache"/>  
+                </bean>  
+            </set>  
+        </property>  
+    </bean>  
+  
+    <!-- redis 相关配置 -->  
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <property name="maxIdle" value="${redis.pool.maxIdle}" />        
+        <property name="maxWaitMillis" value="${redis.pool.maxWait}" />  
+        <property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />  
+    </bean>  
+  
+    <bean id="connectionFactory01"  
+        class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  
+        p:host-name="${redis.ip}" p:port="${redis.port}" p:pool-config-ref="poolConfig"  
+        p:database="${redis.database}" />  
+  
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory" ref="connectionFactory01" />  
+    </bean>  
+      
+    <bean id="connectionFactory02"  
+        class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  
+        p:host-name="${redis.ip}" p:port="${redis.port}" p:pool-config-ref="poolConfig"  
+        p:database="${redis.database}" />  
+  
+    <bean id="redisTemplate02" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory" ref="connectionFactory02" />  
+    </bean>
+	
+</beans>  
+
