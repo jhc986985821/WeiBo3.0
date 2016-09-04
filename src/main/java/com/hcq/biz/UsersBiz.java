@@ -1,5 +1,7 @@
 package com.hcq.biz;
 
+import java.util.List;
+
 import com.hcq.bean.Users;
 
 public interface UsersBiz {
@@ -63,4 +65,9 @@ public interface UsersBiz {
 	 * @return
 	 */
 	public boolean modifypwd(Users user);
+	
+	
+	public List<Users> showAllUser();
+	
+		
 }

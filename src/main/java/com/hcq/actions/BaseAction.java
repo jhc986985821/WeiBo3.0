@@ -16,8 +16,26 @@ public abstract class BaseAction extends ActionSupport{
 		return gson.toJson(jsonModel);
 	}
 	
+	public String parseObjectJson(Object object){
+		Gson gson = new Gson();
+		return gson.toJson(object);
+	}
+	
 	public void outJson(JsonModel jsonModel,HttpServletResponse response) throws IOException{
 		String json =parseJson(jsonModel);
+		//跨域
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setContentType("application/json;");
+		response.setCharacterEncoding("utf-8");
+	
+		PrintWriter out=response.getWriter();
+		out.println(json);
+		out.flush();
+		out.close();
+	}
+	
+	public void outJson(Object object,HttpServletResponse response) throws IOException{
+		String json =parseObjectJson(object);
 		//跨域
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setContentType("application/json;");

@@ -1,31 +1,31 @@
 package com.hcq.utils;
 import java.security.MessageDigest;
 /**
- * md5¼ÓÃÜ
- * @author Í¼Áé»úÆ÷ÈË
+ * md5åŠ å¯†
+ * @author å›¾çµæœºå™¨äºº
  *
  */
 public class Md5 {
 	/**
-	 * MD5¼ÓÃÜËã·¨
+	 * MD5åŠ å¯†ç®—æ³•
 	 * 
-	 * ËµÃ÷£º32Î»¼ÓÃÜËã·¨
+	 * è¯´æ˜ï¼š32ä½åŠ å¯†ç®—æ³•
 	 * 
-	 * @param ´ı¼ÓÃÜµÄÊı¾İ
-	 * @return ¼ÓÃÜ½á¹û£¬È«Ğ¡Ğ´µÄ×Ö·û´®
+	 * @param å¾…åŠ å¯†çš„æ•°æ®
+	 * @return åŠ å¯†ç»“æœï¼Œå…¨å°å†™çš„å­—ç¬¦ä¸²
 	 */
 	public static String MD5(String s) {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'a', 'b', 'c', 'd', 'e', 'f' };
 		try {
 			byte[] btInput = s.getBytes("utf-8");
-			// »ñµÃMD5ÕªÒªËã·¨µÄ MessageDigest ¶ÔÏó
+			// è·å¾—MD5æ‘˜è¦ç®—æ³•çš„ MessageDigest å¯¹è±¡
 			MessageDigest mdInst = MessageDigest.getInstance("MD5");
-			// Ê¹ÓÃÖ¸¶¨µÄ×Ö½Ú¸üĞÂÕªÒª
+			// ä½¿ç”¨æŒ‡å®šçš„å­—èŠ‚æ›´æ–°æ‘˜è¦
 			mdInst.update(btInput);
-			// »ñµÃÃÜÎÄ
+			// è·å¾—å¯†æ–‡
 			byte[] md = mdInst.digest();
-			// °ÑÃÜÎÄ×ª»»³ÉÊ®Áù½øÖÆµÄ×Ö·û´®ĞÎÊ½
+			// æŠŠå¯†æ–‡è½¬æ¢æˆåå…­è¿›åˆ¶çš„å­—ç¬¦ä¸²å½¢å¼
 			int j = md.length;
 			char str[] = new char[j * 2];
 			int k = 0;

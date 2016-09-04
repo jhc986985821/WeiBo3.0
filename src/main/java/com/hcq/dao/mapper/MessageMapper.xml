@@ -36,6 +36,10 @@
 		select * from message where uid =#{user.Uid} order by Mdatetime desc
 	</select>
 	
+	<select id="selectAllMessage" resultMap="MessageMap">
+		select Mid,Uid,Cid,Mcontent,Mdatetime from message
+	</select>
+	
 	<resultMap type="Message" id="MessageMap">
 		<association property="user" column="Uid" select="com.hcq.dao.mapper.UsersMapper.getMyUser"/>
 	</resultMap>

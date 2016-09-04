@@ -86,5 +86,19 @@ public class Mytest extends TestCase {
 		redisbiz.putObject("1", users);
 	}
 	
+	public void test4(){
+		ApplicationContext context=new ClassPathXmlApplicationContext("beans_mybatis.xml");
+		UsersBiz usersBiz=(UsersBiz) context.getBean("usersBizImpl");
+		List<Users>users=usersBiz.showAllUser();
+		System.out.println(users);
+	}
+	
+	public void test5(){
+		ApplicationContext context=new ClassPathXmlApplicationContext("beans_mybatis.xml");
+		MessageBiz messageBiz=(MessageBiz) context.getBean("messageBizImpl");
+		List<Message>users=messageBiz.selectAllMessage();
+		System.out.println(users);
+	}
+	
 	
 }

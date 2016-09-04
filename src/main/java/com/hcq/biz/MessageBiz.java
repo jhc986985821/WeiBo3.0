@@ -24,4 +24,6 @@ public interface MessageBiz {
 
 	public List<Message> selectMyMessageByUid(Integer uid);
 	
+	public List<Message>selectAllMessage();
+	
 }

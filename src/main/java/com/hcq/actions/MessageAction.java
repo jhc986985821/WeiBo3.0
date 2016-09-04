@@ -18,6 +18,8 @@ import com.hcq.biz.MessageBiz;
 import com.hcq.biz.MessageReplyBiz;
 import com.hcq.biz.UsersBiz;
 import com.hcq.mq.queue.TopicSender;
+import com.hcq.utils.LuceneUtil;
+import com.hcq.web.model.HotWord;
 import com.opensymphony.xwork2.ModelDriven;
 
 @Controller
@@ -36,7 +38,7 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 	public void AddMessage() throws IOException {
 		try {
 			messageBiz.addMessage(message);
-			topicSender.send(message.toString());
+			//topicSender.send(message.toString());
 			Users users = usersBiz.getUser(message.getUser().getUid());
 			message.setUser(users);
 			jsonModel.setCode(1);
@@ -105,6 +107,12 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 				message.setMessageReply(messageReplies);
 			}
 			
+			//查网络热词
+			LuceneUtil luceneUtil = new LuceneUtil();
+			List<HotWord>hotWords=luceneUtil.Hotword();
+			
+			
+			jsonModel.setHotWords(hotWords);
 			jsonModel.setCode(1);
 			jsonModel.setObj(mList);
 			jsonModel.setUsers(users);
@@ -160,36 +168,8 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 		super.outJson(jsonModel, ServletActionContext.getResponse());
 	}
 	
-	/*@Action(value = "/dianzan")
-	public void dianzan() throws IOException {
-		int mid = message.getMid();
-	//	System.out.println(mid);
-		try {
-			RedisClient redisClient = new RedisClient();
-			redisClient.adddianzan(mid);
-			jsonModel.setCode(1);
-		} catch (Exception e) {
-			jsonModel.setMsg("error"+e);
-		}
-		super.outJson(jsonModel, ServletActionContext.getResponse());
-	}
 	
-	@Action(value = "/find_dianzan")
-	public void findDianzan() throws IOException {
-		int mid = message.getMid();
-	//	System.out.println(mid);
-		try {
-			RedisClient redisClient = new RedisClient();
-			String m = redisClient.finddianzan(mid);
-			jsonModel.setCode(1);
-			jsonModel.setObj(m);
-		} catch (Exception e) {
-			jsonModel.setMsg("error"+e);
-		}
-		super.outJson(jsonModel, ServletActionContext.getResponse());
-	}
-	*/
-
+	
 	public Message getModel() {
 		message = new Message();
 		return message;

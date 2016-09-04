@@ -6,7 +6,7 @@
 	<!-- 关闭动态方法   action：方法名 -->
     <constant name="struts.enable.DynamicMethodInvocation" value="false" />
     <!-- 启用开发者模式 这样可以打印更详细的错误信息 -->
-    <constant name="struts.devMode" value="true" />
+    <constant name="struts.devMode" value="false" />
     <!-- 表示action的创建由spring执行 -->
     <constant name="struts.objectFactory" value="spring"></constant>
     
@@ -28,4 +28,12 @@
     
     <!-- 该属性指定struts2文件上传中整个请求内容允许的最大字节数 -->
     <constant name="struts.multipart.maxSize" value="2097152"></constant>
+
+
+	<package name="mypackge" namespace="/" extends="struts-default">
+		<!-- 注册拦截器到struts2框架,这样struts2就知道增加 了一个拦截器 -->
+		<interceptors>
+			<interceptor name="lucene" class="com.hcq.web.interceptors.IndexInterceptor"></interceptor>
+		</interceptors>
+	</package>
 </struts>

@@ -1,6 +1,8 @@
 package com.hcq.biz.impl;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,6 +12,7 @@ import com.hcq.bean.Users;
 import com.hcq.biz.BaseBiz;
 import com.hcq.biz.UsersBiz;
 import com.hcq.utils.Encrypt;
+import com.hcq.web.model.ManagerModel;
 
 @Service
 public class UsersBizImpl extends BaseBiz implements UsersBiz{
@@ -76,6 +79,13 @@ public class UsersBizImpl extends BaseBiz implements UsersBiz{
 			return user;
 		}
 		return null;
+	}
+
+	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,rollbackForClassName={"java.lang.RuntimeExceptipon"},propagation=Propagation.NOT_SUPPORTED)
+	public List<Users> showAllUser() {
+		List<Users> userslist=null;
+		userslist=(List<Users>)basedao.findAll(Users.class,"showAllUser");
+		return userslist;
 	}
 
 }

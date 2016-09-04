@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component("topicSender")
 public class TopicSender {
 	
-	@Autowired
-	@Qualifier("jmsTopicTemplate")
+	//@Autowired
+	//@Qualifier("jmsTopicTemplate")
 	private JmsTemplate jmsTemplate;
 	
 	/**

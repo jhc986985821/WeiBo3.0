@@ -2,9 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hcq.dao.mapper.UsersMapper">
 	<cache type="com.hcq.dao.mybatis.cache.MyRedisCache" />
+	
 	<select id="getMyUser" resultType="Users">
 		select uid,Ualais,Uimage, usex,Region from user where uid=#{uid} 
 	</select>
+	
+	<select id="showAllUser" resultType="Users">
+		select *from user
+	</select>
+	
+	
 	
 	<!-- 注册是提供一个功能：用户邮箱不能重复 -->
 	<select id="getUserByUlogon" resultType="Users" parameterType="Users">

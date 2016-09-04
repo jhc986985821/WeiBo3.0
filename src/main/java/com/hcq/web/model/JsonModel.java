@@ -13,8 +13,28 @@ public class JsonModel {
 	private Users users;
 	private List<Users> userslist;
 	private List<MessageReply>messageReplies;
+	private List<HotWord>hotWords;
 	
 	
+	
+	public List<HotWord> getHotWords() {
+		return hotWords;
+	}
+	public void setHotWords(List<HotWord> hotWords) {
+		this.hotWords = hotWords;
+	}
+	public JsonModel(Integer code, String msg, Object obj, String url, Users users, List<Users> userslist,
+			List<MessageReply> messageReplies, List<HotWord> hotWords) {
+		super();
+		this.code = code;
+		this.msg = msg;
+		this.obj = obj;
+		this.url = url;
+		this.users = users;
+		this.userslist = userslist;
+		this.messageReplies = messageReplies;
+		this.hotWords = hotWords;
+	}
 	public List<Users> getUserslist() {
 		return userslist;
 	}
@@ -57,8 +77,9 @@ public class JsonModel {
 	@Override
 	public String toString() {
 		return "JsonModel [code=" + code + ", msg=" + msg + ", obj=" + obj + ", url=" + url + ", users=" + users
-				+ ", userslist=" + userslist + ", messageReplies=" + messageReplies + "]";
+				+ ", userslist=" + userslist + ", messageReplies=" + messageReplies + ", hotWords=" + hotWords + "]";
 	}
+	
 	public List<MessageReply> getMessageReplies() {
 		return messageReplies;
 	}

@@ -53,4 +53,9 @@ public class MessageBizImpl extends BaseBiz implements MessageBiz {
 		return (List<Message>)basedao.findListById(Message.class, uid, "selectMyMessageByUid");
 	}
 
+	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,noRollbackForClassName={"java.lang.RuntimeException"},propagation=Propagation.NOT_SUPPORTED)
+	public List<Message> selectAllMessage() {
+		return (List<Message>)basedao.findAll(Message.class, "selectAllMessage");
+	}
+
 }

@@ -27,7 +27,7 @@ public class RedisDaoImpl implements RedisDao{
 	}
 
 	
-	@Resource(name="redisTemplate")
+	//@Resource(name="redisTemplate")
 	public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}

@@ -28,6 +28,13 @@ public class Users implements Serializable{
 	
 	
 	
+	public Users(Integer uid, String ualais, String uimage) {
+		super();
+		Uid = uid;
+		Ualais = ualais;
+		Uimage = uimage;
+	}
+
 	public String getPassword() {
 		return password;
 	}
