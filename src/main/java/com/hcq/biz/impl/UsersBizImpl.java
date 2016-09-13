@@ -12,7 +12,6 @@ import com.hcq.bean.Users;
 import com.hcq.biz.BaseBiz;
 import com.hcq.biz.UsersBiz;
 import com.hcq.utils.Encrypt;
-import com.hcq.web.model.ManagerModel;
 
 @Service
 public class UsersBizImpl extends BaseBiz implements UsersBiz{
@@ -81,11 +80,10 @@ public class UsersBizImpl extends BaseBiz implements UsersBiz{
 		return null;
 	}
 
-	@Transactional(readOnly=true,isolation=Isolation.DEFAULT,rollbackForClassName={"java.lang.RuntimeExceptipon"},propagation=Propagation.NOT_SUPPORTED)
 	public List<Users> showAllUser() {
-		List<Users> userslist=null;
-		userslist=(List<Users>)basedao.findAll(Users.class,"showAllUser");
-		return userslist;
+		List<Users>users=null;
+		users=basedao.findAll(Users.class, "showAllUser");
+		return users;
 	}
 
 }

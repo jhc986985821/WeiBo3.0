@@ -2,9 +2,11 @@ package com.hcq.biz;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.hcq.bean.Message;
 import com.hcq.bean.Users;
+import com.hcq.web.model.PageModel;
 
 public interface MessageBiz {
 	
@@ -25,5 +27,7 @@ public interface MessageBiz {
 	public List<Message> selectMyMessageByUid(Integer uid);
 	
 	public List<Message>selectAllMessage();
+
+	public PageModel searchPage(Map<String, Object> map);
 	
 }

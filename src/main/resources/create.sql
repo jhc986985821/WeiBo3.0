@@ -78,6 +78,5 @@ create table priMessage(
 select * from message where uid in(select uider as uid from attenGroup where uid = 1) or uid=1 order by Mdatetime desc;
 
 
-
-
+select *from user;
 

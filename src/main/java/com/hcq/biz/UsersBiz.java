@@ -65,9 +65,7 @@ public interface UsersBiz {
 	 * @return
 	 */
 	public boolean modifypwd(Users user);
-	
-	
+
+
 	public List<Users> showAllUser();
-	
-		
 }

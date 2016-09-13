@@ -14,9 +14,16 @@
 	
 	
 	<select id="selectHotPeople" resultType="attenGroup">
-		SELECT Uider, count( * ) AS count  FROM attenGroup GROUP BY Uider ORDER BY count DESClimit 2;
+		SELECT uid,Uider as Uider, count( * ) AS count  FROM attenGroup GROUP BY Uider ORDER BY count DESC limit 10;
 	</select>
 	
-	<!--<resultMap id="HotPeopleList"></resultMap>-->
+	<select id="findMyUid" parameterType="Integer" resultType="String">
+		select uid from AttenGroup where uider=#{Uider}
+	</select>
+	
+	<insert id="insertAtten" parameterType="attenGroup">
+		insert into attenGroup(uid,Uider,NGDatetime) values(#{uid},#{Uider},now());
+	</insert>
+	
 	
 </mapper>

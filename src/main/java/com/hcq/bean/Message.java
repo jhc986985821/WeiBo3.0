@@ -13,6 +13,7 @@ public class Message implements Serializable{
 	private String Mcontent;
 	private String Mdatetime;
 	private List<MessageReply> messageReply;
+	private int praiseCnt;  //点赞数
 	
 	
 	public List<MessageReply> getMessageReply() {
@@ -75,11 +76,26 @@ public class Message implements Serializable{
 		Mdatetime = mdatetime;
 		this.messageReply = messageReply;
 	}
+	public int getPraiseCnt() {
+		return praiseCnt;
+	}
+	public void setPraiseCnt(int praiseCnt) {
+		this.praiseCnt = praiseCnt;
+	}
 	@Override
 	public String toString() {
 		return "Message [Mid=" + Mid + ", user=" + user + ", Cid=" + Cid + ", Mcontent=" + Mcontent + ", Mdatetime="
-				+ Mdatetime + ", messageReply=" + messageReply + "]";
+				+ Mdatetime + ", messageReply=" + messageReply + ", praiseCnt=" + praiseCnt + "]";
 	}
-	
-	
+	public Message(int mid, Users user, Integer cid, String mcontent, String mdatetime, List<MessageReply> messageReply,
+			int praiseCnt) {
+		super();
+		Mid = mid;
+		this.user = user;
+		Cid = cid;
+		Mcontent = mcontent;
+		Mdatetime = mdatetime;
+		this.messageReply = messageReply;
+		this.praiseCnt = praiseCnt;
+	}
 }

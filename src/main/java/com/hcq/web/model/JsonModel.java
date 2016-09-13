@@ -2,6 +2,7 @@ package com.hcq.web.model;
 
 import java.util.List;
 
+import com.hcq.bean.AttenGroup;
 import com.hcq.bean.MessageReply;
 import com.hcq.bean.Users;
 
@@ -14,9 +15,15 @@ public class JsonModel {
 	private List<Users> userslist;
 	private List<MessageReply>messageReplies;
 	private List<HotWord>hotWords;
+	private List<AttenGroup> attenGroups;
 	
 	
-	
+	public List<AttenGroup> getAttenGroups() {
+		return attenGroups;
+	}
+	public void setAttenGroups(List<AttenGroup> attenGroups) {
+		this.attenGroups = attenGroups;
+	}
 	public List<HotWord> getHotWords() {
 		return hotWords;
 	}
@@ -74,11 +81,6 @@ public class JsonModel {
 	public JsonModel() {
 		super();
 	}
-	@Override
-	public String toString() {
-		return "JsonModel [code=" + code + ", msg=" + msg + ", obj=" + obj + ", url=" + url + ", users=" + users
-				+ ", userslist=" + userslist + ", messageReplies=" + messageReplies + ", hotWords=" + hotWords + "]";
-	}
 	
 	public List<MessageReply> getMessageReplies() {
 		return messageReplies;
@@ -86,7 +88,24 @@ public class JsonModel {
 	public void setMessageReplies(List<MessageReply> messageReplies) {
 		this.messageReplies = messageReplies;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "JsonModel [code=" + code + ", msg=" + msg + ", obj=" + obj + ", url=" + url + ", users=" + users
+				+ ", userslist=" + userslist + ", messageReplies=" + messageReplies + ", hotWords=" + hotWords
+				+ ", attenGroups=" + attenGroups + "]";
+	}
+	public JsonModel(Integer code, String msg, Object obj, String url, Users users, List<Users> userslist,
+			List<MessageReply> messageReplies, List<HotWord> hotWords, List<AttenGroup> attenGroups) {
+		super();
+		this.code = code;
+		this.msg = msg;
+		this.obj = obj;
+		this.url = url;
+		this.users = users;
+		this.userslist = userslist;
+		this.messageReplies = messageReplies;
+		this.hotWords = hotWords;
+		this.attenGroups = attenGroups;
+	}
 	
 }

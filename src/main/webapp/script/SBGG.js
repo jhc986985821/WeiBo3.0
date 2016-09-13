@@ -196,3 +196,22 @@ function ting(){
 function goon(){
 	isStop = 0;
 }
+
+function guanzhu(Uider){
+	$.ajax({
+		type: "post",
+		data: {'Uider':Uider},
+		url: "guanzhu",
+		dataType : "json",
+		success : function(data){
+			if(data.code==1){
+				var Uider1 = $("#guanzhu" + Uider).text();
+					var Uider2 = Number(Uider1) + 1;
+					 $("#guanzhu" + Uider).html(Uider2);
+			}else{
+				alert("关注失败,原因：" + data.msg);
+				return false;
+			}
+		}
+	});
+}

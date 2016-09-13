@@ -253,6 +253,41 @@ function addImg(e) {
 	txtObj.value = txtObj.value + imgObj.title;// 将图像的值写入文本框
 	txtObj.focus();// 设置文本框焦点
 }
+
+//点赞
+function dianzan(mid){
+	var href = location.href;
+	var index = href.indexOf("?");
+	var params = href.substring(index + 1);
+	var indexuid = href.indexOf("=");
+	var uid = href.substring(indexuid + 1);
+	$.ajax({
+		type: "post",
+		data: {'Mid':mid,'Uid':uid},
+		url: "dian_zan",
+		dataType : "json",
+		success : function(data){
+		//	var dianzan = "dianzan" + mid;
+			
+			if(data.code==1){
+				alert("点赞成功");
+				
+			var dianzanshu = $("#dianzan" + mid).text();
+		//	alert(dianzanshu);
+			var index2 = dianzanshu.indexOf(")");
+			var num = dianzanshu.substring(1,index2);
+			var num1 = Number(num) + 1;
+		//	alert(Number(num) + 1 );
+			$("#dianzan" + mid).html("("+ num1+")");
+			}else{
+				alert("点赞失败,原因：" + data.msg);
+				return false;
+			}
+		}
+	});
+}
+
+
 /* 通过传进去的图像的含义，从而生成图像的路径，并且生成img的代码 */
 function createImg(title) {
 	/* 通过设置的图像值,挨个匹配寻找路径 */
@@ -586,6 +621,7 @@ window.onload = function() {
 								+ '</td></tr></tbody></table></div><div class="stateShowtime">'
 								+ obj[i].Mdatetime
 								+ '</div><div class="stateOp">';
+						html +=	'<a class="opState" onclick="dianzan('+ obj[i].Mid +')">点赞<span id="dianzan'+ obj[i].Mid +'">('+obj[i].praiseCnt+')</span></a>';
 						html += '<a class="opState" onclick="reform(this)">回复</a><a class="opState" onclick="reform1(this)">转发</a>';
 						if (obj[i].user.Uid == uid) {
 							html += '<a class="opState" onclick="delState(this)">删除</a>';
@@ -604,7 +640,7 @@ window.onload = function() {
 									+ '</span><a href="#">回复</a></td></tr></table></div><br><br>';
 						}
 						// 存indexdb
-						// populateDatabase(obj);
+						populateDatabase(obj);
 
 					}
 

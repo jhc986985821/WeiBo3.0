@@ -1,7 +1,9 @@
 package com.hcq.actions;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
@@ -14,10 +16,10 @@ import com.hcq.bean.Message;
 import com.hcq.bean.MessageReply;
 import com.hcq.bean.Users;
 import com.hcq.biz.AttenGroupBiz;
+import com.hcq.biz.DianzanBiz;
 import com.hcq.biz.MessageBiz;
 import com.hcq.biz.MessageReplyBiz;
 import com.hcq.biz.UsersBiz;
-import com.hcq.mq.queue.TopicSender;
 import com.hcq.utils.LuceneUtil;
 import com.hcq.web.model.HotWord;
 import com.opensymphony.xwork2.ModelDriven;
@@ -30,17 +32,23 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 	private Message message;
 	private MessageBiz messageBiz;
 	private AttenGroupBiz attenGroupBiz;
-	private TopicSender topicSender;
 	private UsersBiz usersBiz;
 	private MessageReplyBiz messageReplyBiz;
+	private DianzanBiz dianzanBiz;
 
 	@Action(value = "message_add")
 	public void AddMessage() throws IOException {
 		try {
 			messageBiz.addMessage(message);
-			//topicSender.send(message.toString());
 			Users users = usersBiz.getUser(message.getUser().getUid());
 			message.setUser(users);
+			
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+			dianzanBiz.putHashOne("message_topic."+ message.getUser().getUid(), "Num",1l);
+			//redis 添加今日发布条数
+			dianzanBiz.putHashOne("message_jinri_" + df.format(new Date()) , "Uid_" + message.getUser().getUid() ,1l);
+			dianzanBiz.getHashOne("message_jinri_" + df.format(new Date()) , "Uid_" + message.getUser().getUid());
+			
 			jsonModel.setCode(1);
 			jsonModel.setObj(message);
 		} catch (Exception e) {
@@ -50,14 +58,6 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 		super.outJson(jsonModel, ServletActionContext.getResponse());
 	}
 
-	@Action(value = "NewMessageCount")
-	public void selectNewMessageCount() throws IOException {
-		int count = messageBiz.selectNewMessageCount(1001);
-		jsonModel.setCode(1);
-		jsonModel.setObj(count);
-
-		super.outJson(jsonModel, ServletActionContext.getResponse());
-	}
 
 	@Action(value = "selectMyMessageByUid")
 	public void selectMyMessageByUid() throws IOException, JMSException {
@@ -105,6 +105,14 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 			for(Message message:mList){
 				List<MessageReply>messageReplies =messageReplyBiz.findMessageReply(message.getMid());
 				message.setMessageReply(messageReplies);
+				if(dianzanBiz.hashExist("topic."+message.getMid(), "PraiseCnt")){
+					String praiseCnt = dianzanBiz.getHashOne(
+							"topic." + message.getMid(), "PraiseCnt");
+					//System.out.println("点赞数"+praiseCnt);
+					message.setPraiseCnt(Integer.parseInt(praiseCnt));
+				}else{
+					message.setPraiseCnt(0);
+				}
 			}
 			
 			//查网络热词
@@ -169,7 +177,6 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 	}
 	
 	
-	
 	public Message getModel() {
 		message = new Message();
 		return message;
@@ -185,10 +192,6 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 		this.messageBiz = messageBiz;
 	}
 
-	@Resource(name = "topicSender")
-	public void setTopicSender(TopicSender topicSender) {
-		this.topicSender = topicSender;
-	}
 
 	@Resource(name = "usersBizImpl")
 	public void setUsersBiz(UsersBiz usersBiz) {
@@ -198,6 +201,11 @@ public class MessageAction extends BaseAction implements ModelDriven<Message> {
 	@Resource(name = "messageReplyBizImpl")
 	public void setMessageReplyBiz(MessageReplyBiz messageReplyBiz) {
 		this.messageReplyBiz = messageReplyBiz;
+	}
+	
+	@Resource(name = "dianzanBizImpl")
+	public void setDianzanBiz(DianzanBiz dianzanBiz) {
+		this.dianzanBiz = dianzanBiz;
 	}
 	
 }

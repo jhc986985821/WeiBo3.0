@@ -11,6 +11,7 @@ import com.hcq.biz.BaseBiz;
 
 @Service
 public class AttenGroupBizImpl extends BaseBiz implements AttenGroupBiz{
+	private RedisTemplate<String, Object> redisTemplate;
 	
 	public List findUidQueue(Integer uid) {
 		return basedao.findListById(AttenGroup.class, uid, "findUidQueue");
@@ -18,6 +19,20 @@ public class AttenGroupBizImpl extends BaseBiz implements AttenGroupBiz{
 
 	public List findUid(Integer uider) {
 		return basedao.findListById(AttenGroup.class, uider, "findUid");
+	}
+
+	public List selectHotPeople() {
+		return basedao.findAll(AttenGroup.class, "selectHotPeople");
+	}
+
+	public boolean addAtten(AttenGroup attenGroup) {
+		basedao.save(attenGroup, "insertAtten");
+		return true;
+	}
+
+	public List findMyUid(Integer uider) {
+		return basedao.findListById(AttenGroup.class,uider,"findMyUid");
+		
 	}
 	
 }

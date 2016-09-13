@@ -6,6 +6,7 @@ public class AttenGroup implements Serializable{
 	private static final long serialVersionUID = -7598682118081575569L;
 	private int NGid;
 	private int uid;
+	private int Uider;
 	private Users user;
 	private String NGDatetime; 
 	private String Ngname="未分组";
@@ -52,12 +53,32 @@ public class AttenGroup implements Serializable{
 	public void setUser(Users user) {
 		this.user = user;
 	}
+	
+	
+	public int getUider() {
+		return Uider;
+	}
+	public void setUider(int uider) {
+		this.Uider = uider;
+	}
 	@Override
 	public String toString() {
-		return "AttenGroup [NGid=" + NGid + ", uid=" + uid + ", user=" + user + ", NGDatetime=" + NGDatetime
-				+ ", Ngname=" + Ngname + ", count=" + count + "]";
+		return "AttenGroup [NGid=" + NGid + ", uid=" + uid + ", Uider=" + Uider
+				+ ", user=" + user + ", NGDatetime=" + NGDatetime + ", Ngname="
+				+ Ngname + ", count=" + count + "]";
 	}
-	public AttenGroup(int nGid, int uid, Users user, String nGDatetime, String ngname, Integer count) {
+	public AttenGroup(int nGid, int uid, int Uider, Users user,
+			String nGDatetime, String ngname, Integer count) {
+		super();
+		NGid = nGid;
+		this.uid = uid;
+		Uider = Uider;
+		this.user = user;
+		NGDatetime = nGDatetime;
+		Ngname = ngname;
+		this.count = count;
+	}
+/*	public AttenGroup(int nGid, int uid, Users user, String nGDatetime, String ngname, Integer count) {
 		super();
 		NGid = nGid;
 		this.uid = uid;
@@ -66,5 +87,5 @@ public class AttenGroup implements Serializable{
 		Ngname = ngname;
 		this.count = count;
 	}
-	
+	*/
 }

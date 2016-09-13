@@ -52,5 +52,26 @@
 		#{Mcontent},now())
 	</insert >
 
+	<select id="sendToday" resultMap="MessageMap">
+		select * from message GROUP BY uid ORDER BY count(mid) DESC limit 10
+	</select>
+	
+	<sql id="conditionSql">
+		from message
+		<where>
+			<if test="Uid!=null and Uid!=''">
+				and Uid=#{Uid}
+			</if>
+		</where>
+	</sql>
+
+	<select id="findMessageCondition" parameterType="map" resultMap="MessageMap">
+		select*<include refid="conditionSql"/>
+	</select>
+
+	<select id="findMessageConditionCount" parameterType="map" resultType="int">
+		select count(1)<include refid="conditionSql"></include>
+		
+	</select>
 	
 </mapper>

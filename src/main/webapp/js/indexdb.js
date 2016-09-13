@@ -103,7 +103,7 @@ function fetchUalaisMessage(Ualais) {
 					html+=jsonObj.Mcontent+'</td></tr></tbody></table></div><div class="stateShowtime">'+jsonObj.Mdatetime+'</div><div class="stateOp">';
 					html+='<a class="opState" onclick="reform(this)">回复</a><a class="opState">转发</a>';
 					html+='</div><div class="huifu"></div></div></div>';  
-			        cursor.continue();  
+			        //cursor.continue();  
 			    }  
 			    $("#mainBannerContent").html(html);
 			};

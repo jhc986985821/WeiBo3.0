@@ -3,11 +3,112 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>灵步网微博-点滴生活，精彩世界</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <link href="styles/SBGG.css" type="text/css" rel="stylesheet" />
 <link href="styles/global.css" type="text/css" rel="stylesheet" />
 <script src="js/jquery.min.js"></script>
 <script src="script/SBGG.js" language="javascript" />
 <script src="Scripts/swfobject_modified.js" type="text/javascript"></script>
+
+<script>
+$(function(){
+	 $.ajax({
+		dataType : 'json',
+		url : 'findHot',
+		type : 'post',
+		success:function(data){
+			if (data.code==1){
+				var htmlstr = "";
+				
+				
+				for (var i = 0; i < data.userslist.length; i++) {
+				//	alert(data.userslist[i].Ualais);
+					
+					  /* <div id="GZIcon" >
+                      <font class="GZIconWord1">351</font><br />
+                      <font class="GZIconWord2"><a href="login.html">加关注</a></font>
+                  </div>
+                  <div id="TX" >
+                      <img src="images/TX1.gif" width="54" height="58" alt="" title="" />
+                  </div>
+                  <div id="customerWord" >
+                  <font class="customerWord1"><a href="#">時事辯論會</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">香港</font><br /> 
+                  <font class="customerWord3">微博766&nbsp;粉丝39968</font><br />
+                  <br />
+                  <br />
+                	</div> */
+                	htmlstr +=	'<div>';
+					htmlstr += '<div id="GZIcon" >';
+					htmlstr += '<span class="GZIconWord1" id="guanzhu'+data.attenGroups[i].Uider+'">'+ data.attenGroups[i].count +'</span><br />';
+					htmlstr += '<font class="GZIconWord2">';
+					htmlstr += '<a onclick="guanzhu('+ data.attenGroups[i].Uider +')">加关注</a></font>';
+					htmlstr += '</div>';
+					htmlstr += '<div id="TX" >';
+					htmlstr += ' <img src="images/TX1.gif" width="54" height="58" alt="" title="" />';
+					htmlstr += '</div>';
+					htmlstr += '<div id="customerWord" >';
+					htmlstr += '<font class="customerWord1"><a href="#">'+data.userslist[i].Ualais +'</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">'+ data.userslist[i].Region+'</font><br />'; 
+			//		htmlstr += '<font class="customerWord1"><a href="#"></a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2"></font><br />'; 
+					htmlstr += '<font class="customerWord3">微博'+ data.obj[i] +'&nbsp;粉丝'+ data.attenGroups[i].count +'</font><br />';
+					htmlstr += '<br /> <br />';
+					htmlstr += '</div>';
+				
+				}
+				
+				$("#customer").html(htmlstr);
+			}else{
+				
+			}
+		}	
+	 })
+});
+
+$(function(){
+	 $.ajax({
+		dataType : 'json',
+		url : 'findToday',
+		type : 'post',
+		success:function(data){
+			if (data.code==1){
+				var htmlstr = '<div id="mainRight1BannerMenuTop"><b>今日发布最多的用户</b>';
+				
+				
+				for (var i = 0; i < data.userslist.length; i++) {
+				/*	 <div id="mainRight1BannerMenuPeople">
+                     <!--下部容器右侧mainRight1BannerMenuPeopleImg DIV 开始 -->
+                     <div id="mainRight1BannerMenuPeopleImg"><a href="#"><img src="images/mainRight1BannerMenuPeopleImg1.gif" alt="" align="absmiddle" title="" /></a>
+                     </div>
+                     <!--下部容器右侧mainRight1BannerMenuPeopleImg DIV 结束 -->
+                     <!--下部容器右侧mainRight1BannerMenuPeopleWord1 DIV 开始 -->
+                     <div id="mainRight1BannerMenuPeopleWord1"><a href="#">雨中人87</a><br />
+                       <a href="#">加关注
+                     </a></div>
+                     <!--下部容器右侧mainRight1BannerMenuPeopleWord1 DIV 结束 -->
+                     <!--下部容器右侧mainRight1BannerMenuPeopleWord2 DIV 开始 -->
+                    <div id="mainRight1BannerMenuPeopleWord2"><b>332</b>
+                    </div>
+                     <!--下部容器右侧mainRight1BannerMenuPeopleWord2 DIV 结束 -->
+                  </div> */
+                	htmlstr +=	'<div>';
+					htmlstr += '<div><a href="#"><img src="'+ data.userslist[i].Uimage+'" /></a>';
+					htmlstr += '<div><a href="#">'+ data.userslist[i].Ualais +'</a><br />';
+					htmlstr += '<a onclick="guanzhu('+ data.userslist[i].Uid +')">加关注</a></font>';
+					htmlstr += '</a></div>';
+					htmlstr += '<div><b>332</b>';
+					htmlstr += '</div>';
+					htmlstr += '</div>';
+				}
+				
+				$("#mainRight1BannerMenu").html(htmlstr);
+			}else{
+				
+			}
+		}	
+	 })
+});
+
+</script>
+
 </head>
 
 <body>
@@ -179,7 +280,7 @@
                         <div id="TX">
                           <img src="images/TX1.gif" width="54" height="58" alt="" title="" />
                         </div>
-                        <div id="todayWord">
+                        <div id="todayWord1">
                         <font class="customerWord1"><a href="#">時事辯論會</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">香港</font><br /> 
                         <font class="customerWord3">微博766&nbsp;粉丝39968</font><br />
                         <br />
@@ -192,56 +293,56 @@
                	  	</div>      
                     
                     <!-- 今日人物2内容DIV -->
-               	  	<div id="today" name="name">                  
-                        <div id="TX" >
+               	  <!-- 	<div id="today2" name="name">                  
+                        <div id="TX2" >
                           <img src="images/TX3.gif" width="54" height="58" alt="" title="" />
                         </div>
-                        <div id="todayWord">
+                        <div id="todayWord2">
                         <font class="customerWord1"><a href="#">摄影师肖育文</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">云南</font><br /> 
                         <font class="customerWord3">微博
 16666&nbsp;粉丝5496</font><br />
                         <br />
                         <br />
                         </div>
-                        <div id="guanzhu">
+                        <div id="guanzhu2">
                         	<img src="images/today.gif" alt="" width="16" height="20" align="absmiddle" title="" />
                             &nbsp;<font style="font-size:14px; color:#005DC3;"><a href="login.html">加关注</a></font>
                     	</div>
            	  	  	</div>         
                     
-                    <!-- 今日人物3内容DIV -->
-               	  	<div id="today" name="name">                  
-                        <div id="TX" >
+                    今日人物3内容DIV
+               	  	<div id="today3" name="name">                  
+                        <div id="TX3" >
                           <img src="images/TX5.gif" width="54" height="58" alt="" title="" />
                         </div>
-                        <div id="todayWord">
+                        <div id="todayWord3">
                         <font class="customerWord1"><a href="#">一娴</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">海外</font><br /> 
                         <font class="customerWord3">微博247&nbsp;粉丝201475</font><br />
                         <br />
                         <br />
                         </div>
-                        <div id="guanzhu">
+                        <div id="guanzhu3">
                         	<img src="images/today.gif" alt="" width="16" height="20" align="absmiddle" title="" />
                             &nbsp;<font style="font-size:14px; color:#005DC3;"><a href="login.html">加关注</a></font>
                     	</div>
            	  	  	</div>         
                     
-                    <!-- 今日人物4内容DIV -->
-           	  	<div id="today" name="name">                  
-                        <div id="TX" >
+                    今日人物4内容DIV
+           	  	<div id="today4" name="name">                  
+                        <div id="TX4" >
                         <img src="images/TX7.gif" width="54" height="58" alt="" title="" />
                         </div>
-                        <div id="todayWord">
+                        <div id="todayWord4">
                         <font class="customerWord1"><a href="#">王亚龙</a>	</font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">台湾</font><br /> 
                         <font class="customerWord3">微博4575&nbsp;粉丝79968</font>
                         <br />
                         <br />
                         </div> 
-                        <div id="guanzhu">
+                        <div id="guanzhu4">
                         	<img src="images/today.gif" alt="" width="16" height="20" align="absmiddle" title="" />
                             &nbsp;<font style="font-size:14px; color:#005DC3;"><a href="login.html">加关注</a></font>
                     	</div><br />                       
-       	  	  	</div> 
+       	  	  	</div>  -->
                               
               </div>
                 <!-- 左侧内容今日人物DIV 结束 -->
@@ -272,199 +373,7 @@
                   	</div>
                 </div>
                 
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">297</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX2.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">程贺麟</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">香港</font><br /> 
-                    <font class="customerWord3">微博3017&nbsp;粉丝19100</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
                 
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">266</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX3.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">一娴</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">海外</font><br /> 
-                    <font class="customerWord3">微博766&nbsp;粉丝39968</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">263</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX4.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">黄海波</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">香港</font><br /> 
-                    <font class="customerWord3">微博1374&nbsp;粉丝68831</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">260</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX5.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">李阳的微博</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2"> 广东 广州市</font><br /> 
-                    <font class="customerWord3">微博238&nbsp;粉丝6801</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">260</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX6.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">董一鸣</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">北京</font><br /> 
-                    <font class="customerWord3">微博254&nbsp;粉丝5999</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">260</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX7.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">柯云路</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">北京 海淀区</font><br /> 
-                    <font class="customerWord3">微博288&nbsp;粉丝7128</font><br />
-                    【人生百态】某大学教授感叹：“在大学，想很好的通过考试，一般有3种方式：第一，作弊；第二，找任课老师拉关系；第三，刻苦攻读！”毕业后，第一种人成了商业能手，第二种人进了政界，第三种人在教书或者打工！有同感的童鞋请转发。41分钟前
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">254</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX8.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">樊建川</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2"> 四川 成都市</font><br /> 
-                    <font class="customerWord3">微博402&nbsp;粉丝7647</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">243</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX9.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">斗官</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">海外</font><br /> 
-                    <font class="customerWord3">微博193&nbsp;粉丝562</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">241</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                        <img src="images/TX10.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">怪帥姜聲揚</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">香港</font><br /> 
-                    <font class="customerWord3">微博1028&nbsp;粉丝60896</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">219</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                      <img src="images/TX11.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">性感美女搞笑汇总</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">广东 广州市</font><br /> 
-                    <font class="customerWord3">微博511&nbsp;粉丝542</font><br />
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">215</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                      <img src="images/TX12.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">李忠辉</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">
-                    <font class="customerWord2">广东 深圳市</font><br />
-                    <font class="customerWord3">微博1406&nbsp;粉丝5039</font><br /> 娱乐项目开发，应该照顾国人情感——体验经济，旅游经济都是趋势，但活动策划者要做受人尊敬的大爷而不是讨骂的孙子。//@時事辯論會 这个好玩吗？33分钟前 
-                    <br />
-                    <br />
-                  	</div>
-                </div>
-                
-                <div id="customer">
-                    <div id="GZIcon" >
-                        <font class="GZIconWord1">188</font><br />
-                        <font class="GZIconWord2"><a href="#">加关注</a></font>
-                    </div>
-                    <div id="TX" >
-                      <img src="images/TX13.gif" width="54" height="58" alt="" title="" />
-                    </div>
-                    <div id="customerWord" >
-                    <font class="customerWord1"><a href="#">不弯的丁子</a></font><img src="images/HG.gif" alt="" width="15" height="15" align="absmiddle" title=""/>&nbsp;<font class="customerWord2">北京 朝阳区</font><br /> 
-                    <font class="customerWord3">微博507&nbsp;粉丝491</font><br />不夸张//@闻媚而动 太夸张了吧？//@不弯的丁子 不能把你忽悠，就把你灭掉！ 毛的精髓！ @闻媚而动 什么都要/废除滴/@张铁 啥理，说说，//@闻媚而动 说滴好//@张铁 有理，/@老顽童野兔 一百步还要笑五十步！还要脸不？恬不知耻！陈云评他：建党他有份，建国他有功，治国他无能，文革他犯罪！/@张铁 呵呵查看全文今天 16:15 
-                    <br />
-                    <br />
-                  	</div>
-                </div>
                 
       	</div>
     </div>
