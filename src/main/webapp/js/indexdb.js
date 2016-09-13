@@ -1,5 +1,5 @@
 var localDatabase = {};
-var dbName = "weiboDB";
+var dbName = "weiboDB"+(Math.floor(Math.random() * 100000));
 localDatabase.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 localDatabase.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
 localDatabase.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
